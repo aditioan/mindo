@@ -1,4 +1,4 @@
-<?php get_header(); ?>
+<?php /* Template Name: Mindo Front Template */ get_header(); ?>
 
 	<!-- Portfolio Grid Section -->
     <section id="portfolio">

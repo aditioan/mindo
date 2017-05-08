@@ -62,6 +62,117 @@ if (function_exists('add_theme_support'))
 	Functions
 \*------------------------------------*/
 
+// Bootstrap_Walker_Nav_Menu setup
+
+add_action( 'after_setup_theme', 'bootstrap_setup' );
+
+if ( ! function_exists( 'bootstrap_setup' ) ):
+
+    function bootstrap_setup(){
+
+        add_action( 'init', 'register_menu' );
+
+        function register_menu(){
+            register_nav_menu( 'top-bar', 'Top Menu' ); 
+        }
+
+        class Bootstrap_Walker_Nav_Menu extends Walker_Nav_Menu {
+
+
+            function start_lvl( &$output, $depth = 0, $args = array() ) {
+
+                $indent = str_repeat( "\t", $depth );
+                $output    .= "\n$indent<ul class=\"dropdown-menu\">\n";
+
+            }
+
+            function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
+
+                if (!is_object($args)) {
+                    return; // menu has not been configured
+                }
+
+                $indent = ( $depth ) ? str_repeat( "\t", $depth ) : '';
+
+                $li_attributes = '';
+                $class_names = $value = '';
+
+                $classes = empty( $item->classes ) ? array() : (array) $item->classes;
+                $classes[] = ($args->has_children) ? 'dropdown' : '';
+                $classes[] = ($item->current || $item->current_item_ancestor) ? 'active' : '';
+                $classes[] = 'menu-item-' . $item->ID;
+
+
+                $class_names = join( ' ', apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args ) );
+                $class_names = ' class="' . esc_attr( $class_names ) . '"';
+
+                $id = apply_filters( 'nav_menu_item_id', 'menu-item-'. $item->ID, $item, $args );
+                $id = strlen( $id ) ? ' id="' . esc_attr( $id ) . '"' : '';
+
+                $output .= $indent . '<li' . $id . $value . $class_names . $li_attributes . '>';
+
+                $attributes  = ! empty( $item->attr_title ) ? ' title="'  . esc_attr( $item->attr_title ) .'"' : '';
+                $attributes .= ! empty( $item->target )     ? ' target="' . esc_attr( $item->target     ) .'"' : '';
+                $attributes .= ! empty( $item->xfn )        ? ' rel="'    . esc_attr( $item->xfn        ) .'"' : '';
+                $attributes .= ! empty( $item->url )        ? ' href="'   . esc_attr( $item->url        ) .'"' : '';
+                $attributes .= ($args->has_children)        ? ' class="dropdown-toggle" data-toggle="dropdown"' : '';
+
+                $item_output = $args->before;
+                $item_output .= '<a'. $attributes .'>';
+                $item_output .= $args->link_before . apply_filters( 'the_title', $item->title, $item->ID ) . $args->link_after;
+                $item_output .= ($args->has_children) ? ' <b class="caret"></b></a>' : '</a>';
+                $item_output .= $args->after;
+
+                $output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );
+            }
+
+            function display_element( $element, &$children_elements, $max_depth, $depth=0, $args, &$output ) {
+
+                if ( !$element )
+                    return;
+
+                $id_field = $this->db_fields['id'];
+
+                //display this element
+                if ( is_array( $args[0] ) )
+                    $args[0]['has_children'] = ! empty( $children_elements[$element->$id_field] );
+                else if ( is_object( $args[0] ) )
+                    $args[0]->has_children = ! empty( $children_elements[$element->$id_field] );
+                $cb_args = array_merge( array(&$output, $element, $depth), $args);
+                call_user_func_array(array(&$this, 'start_el'), $cb_args);
+
+                $id = $element->$id_field;
+
+                // descend only when the depth is right and there are childrens for this element
+                if ( ($max_depth == 0 || $max_depth > $depth+1 ) && isset( $children_elements[$id]) ) {
+
+                    foreach( $children_elements[ $id ] as $child ){
+
+                        if ( !isset($newlevel) ) {
+                            $newlevel = true;
+                            //start the child delimiter
+                            $cb_args = array_merge( array(&$output, $depth), $args);
+                            call_user_func_array(array(&$this, 'start_lvl'), $cb_args);
+                        }
+                        $this->display_element( $child, $children_elements, $max_depth, $depth + 1, $args, $output );
+                    }
+                        unset( $children_elements[ $id ] );
+                }
+
+                if ( isset($newlevel) && $newlevel ){
+                    //end the child delimiter
+                    $cb_args = array_merge( array(&$output, $depth), $args);
+                    call_user_func_array(array(&$this, 'end_lvl'), $cb_args);
+                }
+
+                //end this element
+                $cb_args = array_merge( array(&$output, $element, $depth), $args);
+                call_user_func_array(array(&$this, 'end_el'), $cb_args);
+            }
+        }
+    }
+endif;
+
 // mindo Blank navigation
 function mindo_nav()
 {
@@ -69,23 +180,30 @@ function mindo_nav()
 	array(
 		'theme_location'  => 'header-menu',
 		'menu'            => '',
-		'container'       => 'div',
-		'container_class' => 'menu-{menu slug}-container',
+		'container'       => false,
+		'container_class' => '',
 		'container_id'    => '',
-		'menu_class'      => 'menu',
-		'menu_id'         => '',
-		'echo'            => true,
-		'fallback_cb'     => 'wp_page_menu',
-		'before'          => '',
-		'after'           => '',
-		'link_before'     => '',
-		'link_after'      => '',
-		'items_wrap'      => '<ul>%3$s</ul>',
-		'depth'           => 0,
-		'walker'          => ''
+		'menu_class'      => 'nav navbar-nav navbar-right'
+		// 'menu_id'         => '',
+		// 'echo'            => true,
+		// 'fallback_cb'     => 'wp_page_menu',
+		// 'before'          => '',
+		// 'after'           => '',
+		// 'link_before'     => '',
+		// 'link_after'      => '',
+		// 'items_wrap'      => '<ul>%3$s</ul>',
+		// 'depth'           => 0,
+		// 'walker'          => ''
 		)
 	);
 }
+
+// add_filter ( 'nav_menu_css_class', 'mindo_li_style' );
+
+// function mindo_li_style ( $classes, $item, $args, $depth ){
+//   $classes[] = 'page-scroll';
+//   return $classes;
+// }
 
 // Load mindo Blank scripts (header.php)
 function mindo_header_scripts()
@@ -101,8 +219,8 @@ function mindo_header_scripts()
         wp_register_script('bootstrap', get_template_directory_uri() . '/js/bootstrap.min.js', array('jquery')); // Custom scripts
         wp_enqueue_script('bootstrap'); // Enqueue it!
 
-        wp_register_script('contact', get_template_directory_uri() . '/js/contact_me.js', array('jquery')); // Custom scripts
-        wp_enqueue_script('contact'); // Enqueue it!
+        //wp_register_script('contact', get_template_directory_uri() . '/js/contact_me.js', array('jquery')); // Custom scripts
+        //wp_enqueue_script('contact'); // Enqueue it!
 
         wp_register_script('validation', get_template_directory_uri() . '/js/jqBootstrapValidation.js', array('jquery')); // Custom scripts
         wp_enqueue_script('validation'); // Enqueue it!
@@ -347,116 +465,15 @@ function mindocomments($comment, $args, $depth)
 	<?php endif; ?>
 <?php }
 
-// Bootstrap_Walker_Nav_Menu setup
-
-add_action( 'after_setup_theme', 'bootstrap_setup' );
-
-if ( ! function_exists( 'bootstrap_setup' ) ):
-
-    function bootstrap_setup(){
-
-        add_action( 'init', 'register_menu' );
-
-        function register_menu(){
-            register_nav_menu( 'top-bar', 'Bootstrap Top Menu' ); 
-        }
-
-        class Bootstrap_Walker_Nav_Menu extends Walker_Nav_Menu {
-
-
-            function start_lvl( &$output, $depth = 0, $args = array() ) {
-
-                $indent = str_repeat( "\t", $depth );
-                $output    .= "\n$indent<ul class=\"dropdown-menu\">\n";
-
-            }
-
-            function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
-
-                if (!is_object($args)) {
-                    return; // menu has not been configured
-                }
-
-                $indent = ( $depth ) ? str_repeat( "\t", $depth ) : '';
-
-                $li_attributes = '';
-                $class_names = $value = '';
-
-                $classes = empty( $item->classes ) ? array() : (array) $item->classes;
-                $classes[] = ($args->has_children) ? 'dropdown' : '';
-                $classes[] = ($item->current || $item->current_item_ancestor) ? 'active' : '';
-                $classes[] = 'menu-item-' . $item->ID;
-
-
-                $class_names = join( ' ', apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args ) );
-                $class_names = ' class="' . esc_attr( $class_names ) . '"';
-
-                $id = apply_filters( 'nav_menu_item_id', 'menu-item-'. $item->ID, $item, $args );
-                $id = strlen( $id ) ? ' id="' . esc_attr( $id ) . '"' : '';
-
-                $output .= $indent . '<li' . $id . $value . $class_names . $li_attributes . '>';
-
-                $attributes  = ! empty( $item->attr_title ) ? ' title="'  . esc_attr( $item->attr_title ) .'"' : '';
-                $attributes .= ! empty( $item->target )     ? ' target="' . esc_attr( $item->target     ) .'"' : '';
-                $attributes .= ! empty( $item->xfn )        ? ' rel="'    . esc_attr( $item->xfn        ) .'"' : '';
-                $attributes .= ! empty( $item->url )        ? ' href="'   . esc_attr( $item->url        ) .'"' : '';
-                $attributes .= ($args->has_children)        ? ' class="dropdown-toggle" data-toggle="dropdown"' : '';
-
-                $item_output = $args->before;
-                $item_output .= '<a'. $attributes .'>';
-                $item_output .= $args->link_before . apply_filters( 'the_title', $item->title, $item->ID ) . $args->link_after;
-                $item_output .= ($args->has_children) ? ' <b class="caret"></b></a>' : '</a>';
-                $item_output .= $args->after;
-
-                $output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );
-            }
-
-            function display_element( $element, &$children_elements, $max_depth, $depth=0, $args, &$output ) {
-
-                if ( !$element )
-                    return;
-
-                $id_field = $this->db_fields['id'];
-
-                //display this element
-                if ( is_array( $args[0] ) )
-                    $args[0]['has_children'] = ! empty( $children_elements[$element->$id_field] );
-                else if ( is_object( $args[0] ) )
-                    $args[0]->has_children = ! empty( $children_elements[$element->$id_field] );
-                $cb_args = array_merge( array(&$output, $element, $depth), $args);
-                call_user_func_array(array(&$this, 'start_el'), $cb_args);
-
-                $id = $element->$id_field;
-
-                // descend only when the depth is right and there are childrens for this element
-                if ( ($max_depth == 0 || $max_depth > $depth+1 ) && isset( $children_elements[$id]) ) {
-
-                    foreach( $children_elements[ $id ] as $child ){
-
-                        if ( !isset($newlevel) ) {
-                            $newlevel = true;
-                            //start the child delimiter
-                            $cb_args = array_merge( array(&$output, $depth), $args);
-                            call_user_func_array(array(&$this, 'start_lvl'), $cb_args);
-                        }
-                        $this->display_element( $child, $children_elements, $max_depth, $depth + 1, $args, $output );
-                    }
-                        unset( $children_elements[ $id ] );
-                }
-
-                if ( isset($newlevel) && $newlevel ){
-                    //end the child delimiter
-                    $cb_args = array_merge( array(&$output, $depth), $args);
-                    call_user_func_array(array(&$this, 'end_lvl'), $cb_args);
-                }
-
-                //end this element
-                $cb_args = array_merge( array(&$output, $element, $depth), $args);
-                call_user_func_array(array(&$this, 'end_el'), $cb_args);
-            }
+//Page About Mindo
+function about(){
+    $wp_query = new WP_Query(array('page_id' => 16));
+    if ($wp_query->have_posts()) {
+        while ($wp_query->have_posts()) {
+            # code...
         }
     }
-endif;
+}
 
 /*------------------------------------*\
 	Actions + Filters + ShortCodes

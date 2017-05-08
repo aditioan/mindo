@@ -1,14 +1,52 @@
 			<!-- footer -->
-			<footer class="footer" role="contentinfo">
-
-				<!-- copyright -->
-				<p class="copyright">
-					&copy; <?php echo date('Y'); ?> Copyright <?php bloginfo('name'); ?>. <?php _e('Powered by', 'mindo'); ?>
-					<a href="//wordpress.org" title="WordPress">WordPress</a> &amp; <a href="http://www.mindosolutions.com" title="PT Mindo Small Bussiness Solutions">PT Mindo Small Bussiness Solutions</a>.
-				</p>
-				<!-- /copyright -->
-
-			</footer>
+		    <footer class="text-center">
+		        <div class="footer-above">
+		            <div class="container">
+		                <div class="row">
+		                    <div class="footer-col col-md-4">
+		                        <h3>Location</h3>
+		                        <p>
+		                        	Jl. Kolonel Sugiono no. 77/79
+		                            <br>Wirogunan - Mergangsan
+		                            <br>Yogyakarta
+		                            <br>Indonesia 55151
+		                            <br><i class="fa fa-fw fa-phone"></i>+62 89 9458 5169
+		                        </p>
+		                    </div>
+		                    <div class="footer-col col-md-4">
+		                        <h3>Around the Web</h3>
+		                        <ul class="list-inline">
+		                            <li>
+		                                <a href="#" class="btn-social btn-outline"><span class="sr-only">Facebook</span><i class="fa fa-fw fa-facebook"></i></a>
+		                            </li>
+		                            <li>
+		                                <a href="#" class="btn-social btn-outline"><span class="sr-only">Google Plus</span><i class="fa fa-fw fa-google-plus"></i></a>
+		                            </li>
+		                            <li>
+		                                <a href="#" class="btn-social btn-outline"><span class="sr-only">Twitter</span><i class="fa fa-fw fa-twitter"></i></a>
+		                            </li>
+		                            <li>
+		                                <a href="#" class="btn-social btn-outline"><span class="sr-only">Linked In</span><i class="fa fa-fw fa-linkedin"></i></a>
+		                            </li>
+		                        </ul>
+		                    </div>
+		                    <div class="footer-col col-md-4">
+		                        <h3>About Mindo</h3>
+		                        <p>MINDO is a full service outsourcing partner dedicated to helping small and medium sized businesses achieve their goals.</p>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="footer-below">
+		            <div class="container">
+		                <div class="row">
+		                    <div class="col-lg-12">
+		                        Copyright &copy; Mindo 2017
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		    </footer>
 			<!-- /footer -->
 
 		</div>
