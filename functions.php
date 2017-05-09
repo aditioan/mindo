@@ -210,6 +210,9 @@ function mindo_header_scripts()
 {
     if ($GLOBALS['pagenow'] != 'wp-login.php' && !is_admin()) {
 
+        wp_register_script('jqueri-min', 'http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js', array('jquery')); // Custom scripts
+        wp_enqueue_script('jqueri-min'); // Enqueue it!
+
     	wp_register_script('conditionizr', get_template_directory_uri() . '/js/lib/conditionizr-4.3.0.min.js', array(), '4.3.0'); // Conditionizr
         wp_enqueue_script('conditionizr'); // Enqueue it!
 
@@ -222,10 +225,19 @@ function mindo_header_scripts()
         //wp_register_script('contact', get_template_directory_uri() . '/js/contact_me.js', array('jquery')); // Custom scripts
         //wp_enqueue_script('contact'); // Enqueue it!
 
+        wp_register_script('easing', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js', array('jquery')); // Custom scripts
+        wp_enqueue_script('easing'); // Enqueue it!
+
         wp_register_script('validation', get_template_directory_uri() . '/js/jqBootstrapValidation.js', array('jquery')); // Custom scripts
         wp_enqueue_script('validation'); // Enqueue it!
 
-        wp_register_script('mindoscripts', get_template_directory_uri() . '/js/freelancer.min.js', array('jquery')); // Custom scripts
+        wp_register_script('fullPage', get_template_directory_uri() . '/js/jquery.fullPage.min.js', array('jquery')); // Custom scripts
+        wp_enqueue_script('fullPage'); // Enqueue it!
+
+        // wp_register_script('example', get_template_directory_uri() . '/js/examples.js', array('jquery')); // Custom scripts
+        // wp_enqueue_script('example'); // Enqueue it!
+
+        wp_register_script('mindoscripts', get_template_directory_uri() . '/js/freelancer.js', array('jquery')); // Custom scripts
         wp_enqueue_script('mindoscripts'); // Enqueue it!
     }
 }
@@ -247,6 +259,12 @@ function mindo_styles()
 
     wp_register_style('font-awesome', get_template_directory_uri() . '/css/font-awesome.min.css', array());
     wp_enqueue_style('font-awesome'); // Enqueue it!
+
+    wp_register_style('full-page', get_template_directory_uri() . '/css/jquery.fullPage.css', array());
+    wp_enqueue_style('full-page'); // Enqueue it!
+
+    // wp_register_style('example', get_template_directory_uri() . '/css/examples.css', array());
+    // wp_enqueue_style('example'); // Enqueue it!
 
     wp_register_style('normalize', get_template_directory_uri() . '/css/normalize.min.css', array(), '1.0', 'all');
     wp_enqueue_style('normalize'); // Enqueue it!
@@ -305,7 +323,7 @@ if (function_exists('register_sidebar'))
     // Define Sidebar Widget Area 1
     register_sidebar(array(
         'name' => __('Widget Area 1', 'mindo'),
-        'description' => __('Description for this widget-area...', 'mindo'),
+        'description' => __('Sidebar Area', 'mindo'),
         'id' => 'widget-area-1',
         'before_widget' => '<div id="%1$s" class="%2$s">',
         'after_widget' => '</div>',
@@ -316,8 +334,41 @@ if (function_exists('register_sidebar'))
     // Define Sidebar Widget Area 2
     register_sidebar(array(
         'name' => __('Widget Area 2', 'mindo'),
-        'description' => __('Description for this widget-area...', 'mindo'),
+        'description' => __('Service 1', 'mindo'),
         'id' => 'widget-area-2',
+        'before_widget' => '<div id="%1$s" class="%2$s">',
+        'after_widget' => '</div>',
+        'before_title' => '<h3>',
+        'after_title' => '</h3>'
+    ));
+
+    // Define Sidebar Widget Area 3
+    register_sidebar(array(
+        'name' => __('Widget Area 3', 'mindo'),
+        'description' => __('Service 2', 'mindo'),
+        'id' => 'widget-area-3',
+        'before_widget' => '<div id="%1$s" class="%2$s">',
+        'after_widget' => '</div>',
+        'before_title' => '<h3>',
+        'after_title' => '</h3>'
+    ));
+
+    // Define Sidebar Widget Area 4
+    register_sidebar(array(
+        'name' => __('Widget Area 4', 'mindo'),
+        'description' => __('Service 3', 'mindo'),
+        'id' => 'widget-area-4',
+        'before_widget' => '<div id="%1$s" class="%2$s">',
+        'after_widget' => '</div>',
+        'before_title' => '<h3>',
+        'after_title' => '</h3>'
+    ));
+
+    // Define Sidebar Widget Area 5
+    register_sidebar(array(
+        'name' => __('Widget Area 5', 'mindo'),
+        'description' => __('Service 4', 'mindo'),
+        'id' => 'widget-area-5',
         'before_widget' => '<div id="%1$s" class="%2$s">',
         'after_widget' => '</div>',
         'before_title' => '<h3>',

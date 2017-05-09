@@ -57,6 +57,8 @@
                         <h2 class="name">Mindo Sample Template</h2>
                         <hr class="star-light">
                         <span class="skills">Web Developer - Graphic Artist - User Experience Designer</span>
+                        <br>
+                        <span class="skills">(This section will be only showed in front page)</span>
                     </div>
                 </div>
             </div>

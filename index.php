@@ -1,16 +1,40 @@
 <?php get_header(); ?>
 
+    <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="fullpage">
 	<!-- Portfolio Grid Section -->
     <section id="portfolio">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
-                    <h2>Portfolio</h2>
+                    <h2>Portfolio (Using Post Category)</h2>
                     <hr class="star-primary">
                 </div>
             </div>
             <div class="row">
-                <h1>Telo Goreng 1</h1>
                 <?php
 					$catquery = new WP_Query( 'cat=3&posts_per_page=10' );
 					while($catquery->have_posts()) : $catquery->the_post();
@@ -31,12 +55,50 @@
         </div>
     </section>
 
+    <!-- Service Grid Section -->
+    <section id="service">
+        <div class="container">
+            <div class="row" style="padding-bottom: 50px;">
+                <div class="col-lg-12 text-center">
+                    <h2>Service (Using Widget)</h2>
+                    <hr class="star-primary">
+                </div>
+            </div>
+            <div class="row">
+                <?php if(is_active_sidebar('widget-area-2')): ?>
+                    <div class="col-sm-3 service-item">
+                            <?php dynamic_sidebar('widget-area-2'); ?>
+                        </a>
+                    </div>
+                <?php endif; ?>
+                <?php if(is_active_sidebar('widget-area-3')): ?>
+                    <div class="col-sm-3 service-item">
+                            <?php dynamic_sidebar('widget-area-3'); ?>
+                        </a>
+                    </div>
+                <?php endif; ?>
+                <?php if(is_active_sidebar('widget-area-4')): ?>
+                    <div class="col-sm-3 service-item">
+                            <?php dynamic_sidebar('widget-area-4'); ?>
+                        </a>
+                    </div>
+                <?php endif; ?>
+                <?php if(is_active_sidebar('widget-area-5')): ?>
+                    <div class="col-sm-3 service-item">
+                            <?php dynamic_sidebar('widget-area-5'); ?>
+                        </a>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </section>
+
      <!-- About Section -->
     <section class="success" id="about">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
-                    <h2>About</h2>
+                    <h2>About (Using Page)</h2>
                     <hr class="star-light">
                 </div>
             </div>
@@ -58,7 +120,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
-                    <h2>Contact Me</h2>
+                    <h2>Contact Me (Static HTML)</h2>
                     <hr class="star-primary">
                 </div>
             </div>
@@ -108,6 +170,7 @@
         </div>
     </section>
 
+</div>
 	<!-- <main role="main"> -->
 		<!-- section -->
 		<!-- <section> -->

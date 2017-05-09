@@ -10,7 +10,6 @@
                 </div>
             </div>
             <div class="row">
-                <h1>Telo Goreng 2</h1>
                 <?php
 					$catquery = new WP_Query( 'cat=3&posts_per_page=10' );
 					while($catquery->have_posts()) : $catquery->the_post();
