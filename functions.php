@@ -237,8 +237,8 @@ function mindo_header_scripts()
         // wp_register_script('example', get_template_directory_uri() . '/js/examples.js', array('jquery')); // Custom scripts
         // wp_enqueue_script('example'); // Enqueue it!
 
-        wp_register_script('mindoscripts', get_template_directory_uri() . '/js/freelancer.js', array('jquery')); // Custom scripts
-        wp_enqueue_script('mindoscripts'); // Enqueue it!
+        // wp_register_script('mindoscripts', get_template_directory_uri() . '/js/freelancer.js', array('jquery')); // Custom scripts
+        // wp_enqueue_script('mindoscripts'); // Enqueue it!
     }
 }
 

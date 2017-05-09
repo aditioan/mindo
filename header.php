@@ -23,7 +23,7 @@
         </script>
 
 	</head>
-	<body <?php body_class(); ?>>
+	<body id="page-top" <?php body_class(); ?>>
 
 	<div id="skipnav"><a href="#maincontent">Skip to main content</a></div>
 
